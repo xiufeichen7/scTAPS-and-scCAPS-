@@ -228,3 +228,15 @@ p <- dat[!dat$V1%in%c("assembly gaps and alignment artifacts","ZNF genes"),] %>%
 
 ggsave("cd8_t_cell_meth_chrhmm.pdf",p,width = 10,height = 6)
 
+#### mESC CAPS ####
+res_wide <- fread("/gpfs3/well/ludwig/users/cfo155/scTAPS_CAPS/mESC_update/meth/all_sample.CpG.1m.bed")
+res_wide <- res_wide %>%
+  as.data.frame() %>%
+  filter(CHROM == "chr12" & START >= 3000000 & END <= 120000000) 
+mod <- res_wide %>% select(contains("MOD")) 
+total <- res_wide %>% select(contains("TOTAL")) 
+meth <- mod/total
+meth %>% t() %>%
+  pheatmap::pheatmap(cluster_rows = FALSE, cluster_cols = FALSE, border_color = NA,
+                     color=colorRampPalette(c("navy", "white", "red"))(50),
+                     filename = "/gpfs3/well/ludwig/users/cfo155/scTAPS_CAPS/mESC_update/meth/chr12_3m_120m.png", width = 24,height = 12,show_rownames = FALSE)

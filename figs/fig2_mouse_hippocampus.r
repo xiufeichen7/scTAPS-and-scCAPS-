@@ -7,7 +7,8 @@ library(ggplot2)
 library(RColorBrewer)
 library(ggsci)
 library(viridis)
-setwd("/Users/chengjingfei/Desktop/mouse_neuron/")
+#setwd("/Users/chengjingfei/Desktop/mouse_neuron/")
+setwd("/users/ludwig/cfo155/cfo155/scTAPS_CAPS/mouse_neuron_update")
 mycolors <- c("#7994C6","#e01a30","#039fcc","#7d2574")
 #### 4a. genome methylation ####
 qc <- read.csv("stats/all_stats.info",header=TRUE)
@@ -38,6 +39,9 @@ p <- qc[!qc$smp%in%exclude_cells,] %>%
   ) +
   geom_jitter(size = 1, alpha = 0.25, width = 0.15) +
   stat_summary(fun = mean, geom = "point", size = 3) +
+  stat_summary(geom="text", fun=mean,color="black",
+               aes(label=sprintf("%1.2f", ..y..)),
+               position=position_nudge(y=8), size=5)+
   scale_color_manual(values=mycolors)+
   scale_x_discrete(breaks=c("C204","C206","C213","C211"), 
                    labels=c('NeuN-','NeuN- aged','NeuN+','NeuN+ aged'))
